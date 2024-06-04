@@ -15,12 +15,13 @@ export default function PostPageAdd() {
   const [previewImage, setPreviewImage] = useState(
     "https://zca.sg/img/placeholder"
   );
+  const [imageName, setImageName] = useState("");
 
   async function addPost() {
     const imageReference = ref(storage, `images/${image.name}`);
     const response = await uploadBytes(imageReference, image);
     const imageUrl = await getDownloadURL(response.ref);
-    await addDoc(collection(db, "posts"), { caption, image: imageUrl });
+    await addDoc(collection(db, "posts"), { caption, image: imageUrl, imageName: imageName });
     navigate("/");
   }
 
@@ -61,6 +62,7 @@ export default function PostPageAdd() {
                 const previewImage = URL.createObjectURL(imageFile);
                 setImage(imageFile);
                 setPreviewImage(previewImage);
+                setImageName(imageFile.name);
               }}
             />
           </Form.Group>
